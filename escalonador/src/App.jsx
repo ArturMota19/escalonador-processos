@@ -23,6 +23,10 @@ function App() {
   const [overload, setOverload] = useState(1)
   // State paginação
   const [pagination, setPagination] = useState(1)
+  // State array para criação de processos
+  const [processes, setProcesses] = useState([])
+  const exemploArray = [{id: 0, tempo: 0, deadline: 0, chegada: 0, prioridade: 0, paginas: 0, status: 'Waiting'}]
+
   return (
     <main className={s.wrapperMain}>
       <section className={s.internDiv}>
