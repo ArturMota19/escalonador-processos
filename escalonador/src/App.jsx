@@ -1,7 +1,11 @@
 // Components
 import Header from './components/Header/Header'
+import Fifo from './components/Fifo/Fifo'
+import RoundRobin from './components/RoundRobin/RoundRobin'
+import ShortestJob from './components/ShortestJob/ShortestJob'
+import EarliestDeadline from './components/EarliestDeadline/EarliestDeadline'
 // Images
-import logo from '/logo.png';
+
 // Imports
 import { useState } from 'react'
 // Styles
@@ -36,6 +40,10 @@ function App() {
             setPagination={setPagination}
           />
           <div className={s.line}/>
+          {selectedButton === 0 && <EarliestDeadline quantum={quantum} overload={overload} selectedPagination={selectedPagination} pagination={pagination} />}
+          {selectedButton === 1 && <RoundRobin  quantum={quantum} overload={overload} selectedPagination={selectedPagination} pagination={pagination}/>}
+          {selectedButton === 2 && <Fifo  quantum={quantum} overload={overload} selectedPagination={selectedPagination} pagination={pagination}/>}
+          {selectedButton === 3 && <ShortestJob quantum={quantum} overload={overload} selectedPagination={selectedPagination} pagination={pagination}/>}
         </div>
       </section>
     </main>
