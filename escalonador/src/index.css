@@ -1,0 +1,62 @@
+/* Reset CSS */
+
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+/* Remove default padding */
+figure,
+p {
+  padding: 0;
+}
+
+/* Reset font styles */
+body,
+button,
+input,
+optgroup,
+select,
+textarea,
+blockquote,
+figure,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  font-size: 1em;
+  font-weight: normal;
+}
+
+/* Reset list styles */
+ul,
+ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Reset anchor styles */
+a {
+  text-decoration: none;
+  color: inherit;
+}

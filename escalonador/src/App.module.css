@@ -1,0 +1,18 @@
+.wrapperMain{
+  width: 100%;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.internDiv{
+  width: 95%;
+  height: 90vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 3px solid black;
+  border-radius: 8px;
+}
