@@ -21,20 +21,23 @@ function App() {
   const [pagination, setPagination] = useState(1)
   return (
     <main className={s.wrapperMain}>
-      <div className={s.internDiv}>
-        <Header 
-          selectedButton={selectedButton} 
-          setSelectedButton={setSelectedButton}
-          selectedPagination={selectedPagination}
-          setSelectedPagination={setSelectedPagination}
-          quantum={quantum}
-          setQuantum={setQuantum}
-          overload={overload}
-          setOverload={setOverload}
-          pagination={pagination}
-          setPagination={setPagination}
-        />
-      </div>
+      <section className={s.internDiv}>
+        <div className={s.scrollView}>
+          <Header 
+            selectedButton={selectedButton} 
+            setSelectedButton={setSelectedButton}
+            selectedPagination={selectedPagination}
+            setSelectedPagination={setSelectedPagination}
+            quantum={quantum}
+            setQuantum={setQuantum}
+            overload={overload}
+            setOverload={setOverload}
+            pagination={pagination}
+            setPagination={setPagination}
+          />
+          <div className={s.line}/>
+        </div>
+      </section>
     </main>
   )
 }
