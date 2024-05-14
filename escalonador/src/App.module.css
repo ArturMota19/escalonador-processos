@@ -9,10 +9,12 @@
 .internDiv{
   width: 95%;
   height: 90vh;
+  padding: 2rem;
+
+  box-sizing: border-box;
 
   display: flex;
   justify-content: center;
-  align-items: center;
   border: 3px solid black;
   border-radius: 8px;
 }

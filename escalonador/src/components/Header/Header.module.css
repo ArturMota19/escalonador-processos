@@ -1,0 +1,42 @@
+.wrapperHeader{
+  width: 100%;
+  height: 18rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  background-color: rgba(0, 0, 255, 0.514);
+}
+.displayMethod{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: .5rem;
+}
+.displayMethod h1{
+  font-size: 1.5rem;
+  color: #fff;
+}
+.methodSelection{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+.methodSelection button{
+  width: 10rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: 5px;
+  
+  cursor: pointer;
+  color: #fff;
+}
+.selectedButton{
+  background-color: rgb(29, 29, 255);
+}
+.notSelectedButton{
+  background-color: rgb(82, 82, 82);
+}
