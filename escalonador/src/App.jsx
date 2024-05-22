@@ -5,6 +5,7 @@ import Fifo from "./components/Fifo/Fifo";
 import RoundRobin from "./components/RoundRobin/RoundRobin";
 import ShortestJob from "./components/ShortestJob/ShortestJob";
 import EarliestDeadline from "./components/EarliestDeadline/EarliestDeadline";
+import MemoryView from "./components/MemoryView/MemoryView";
 // Images
 
 // Imports
@@ -89,6 +90,8 @@ function App() {
               pagination={pagination}
             />
           )}
+          <div className={s.line} />
+          <MemoryView processes={processes}/>
         </div>
       </section>
     </main>
