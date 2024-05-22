@@ -83,8 +83,6 @@ export default function ShortestJob({
     setSchedulerMatrix([]);
   };
 
-  console.log(schedulerMatrix);
-
   return (
     <div className={s.sjfWrapper}>
       <div className={s.btnWrapper}>
