@@ -58,7 +58,7 @@ export default function ProcessView({ processes, setProcesses }) {
                 onClick={handleRemove(process.id)}
               />
             </div>
-            <div className={s.twoInputs}>
+            <div className={s.threeInputs}>
               <label>
                 Prioridade:
                 <input
@@ -82,8 +82,6 @@ export default function ProcessView({ processes, setProcesses }) {
                   }
                 />
               </label>
-            </div>
-            <div className={s.oneInput}>
               <label>
                 Páginas:
                 <input
