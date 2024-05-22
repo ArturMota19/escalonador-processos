@@ -29,15 +29,16 @@ function App() {
   const [processes, setProcesses] = useState([
     {
       id: 1,
-      time: 0,
+      time: 1,
       deadline: 0,
       arrival: 0,
       priority: 0,
-      pages: 0,
+      pages: 1,
       status: "Waiting",
     },
   ]);
-
+  const [ramProcesses, setRamProcesses] = useState([]);
+  const [reset, setReset] = useState(false);
 
   return (
     <main className={s.wrapperMain}>
@@ -88,10 +89,13 @@ function App() {
               overload={overload}
               selectedPagination={selectedPagination}
               pagination={pagination}
+              processes={processes}
+              setRamProcesses={setRamProcesses}
+              setReset={setReset}
             />
           )}
           <div className={s.line} />
-          <MemoryView processes={processes}/>
+          <MemoryView processes={ramProcesses} reset={reset}/>
         </div>
       </section>
     </main>

@@ -9,11 +9,11 @@ export default function ProcessView({ processes, setProcesses }) {
       ...processes,
       {
         id: processes.length + 1,
-        time: 0,
+        time: 1,
         deadline: 0,
         arrival: 0,
         priority: 0,
-        pages: 0,
+        pages: 1,
         status: "Waiting",
       },
     ]);
