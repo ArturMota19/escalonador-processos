@@ -1,0 +1,90 @@
+.processViewWrapper {
+    width: 100%;
+    padding: .5rem 0;
+
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+}
+
+.addProcessBtn {
+    min-height: 10rem;
+    border: 2px solid  #000;
+    border-radius: .5rem;
+    box-shadow: 0 0 8px #ccc;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 1.8rem;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.noProcess {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.eachProcess {
+    padding: 1rem;
+
+    border: 2px dashed #000;
+    border-radius: .5rem;
+    box-shadow: 0 0 8px #ccc;
+
+    background: rgba(0, 0, 255, 0.514);
+}
+
+.closeBtn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.closeBtn p {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.closeBtn img {
+    width: 2.5rem;
+    height: 2.5rem;
+    cursor: pointer;
+
+}
+
+.twoInputs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.oneInput {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.processViewWrapper label {
+    display: flex;
+    flex-direction: column;
+}
+
+.processViewWrapper input {
+    max-width: 5rem;
+    padding: .5rem;
+
+    border: 1px solid #ccc;
+    border-radius: .5rem;
+
+    outline: none;
+
+    font-size: 1rem;
+}
