@@ -31,6 +31,14 @@
     background: rgb(29, 29, 255);
 }
 
+.btnWrapper .disabledBtn {
+    background: #ccc;
+
+    color: #000;
+
+    cursor: not-allowed;
+}
+
 .btnWrapper .resetBtn {
     background:rgb(82, 82, 82);
 }
