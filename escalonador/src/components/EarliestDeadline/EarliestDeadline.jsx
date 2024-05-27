@@ -70,15 +70,12 @@ export default function EarliestDeadline({
 
         if (remainingTime > quantum) {
           remainingTime -= quantum;
-          const endTime = startTime + quantum;
+          const endTime = parseInt(startTime) + parseInt(quantum);
           const overloadStartTime = endTime;
-          const overloadEndTime = +overloadStartTime + overload;
-          let overloadTeste = 0;
-          overloadTeste += 1;
-          console.log("Nome do overloadTeste:", overloadTeste);
-          console.log("Nome do overload:", overload);
-          console.log("Nome do overloadStartTime:", overloadStartTime);
-          console.log("Nome do overloadEndTime:", overloadEndTime);
+          const overloadEndTime = parseInt(overloadStartTime) + overload;
+          console.log("startTime:", startTime);
+          console.log("quantum:", quantum);
+          console.log("endTime:", endTime);
 
           currentTime = overloadEndTime;
 
@@ -105,7 +102,7 @@ export default function EarliestDeadline({
             return a.deadline - b.deadline;
           });
         } else {
-          const endTime = startTime + remainingTime;
+          const endTime = +startTime + remainingTime;
           currentTime = endTime;
           newSchedulerMatrix.push({ id: process.id, startTime, endTime });
         }
