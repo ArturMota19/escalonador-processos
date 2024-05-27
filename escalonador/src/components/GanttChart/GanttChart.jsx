@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 // Styles
-import s from './GanttChart.module.css';
+import s from "./GanttChart.module.css";
 
 export default function GanttChart({ schedulerMatrix, schedulerType }) {
   const barHeight = 30;
   const barPadding = 10;
   const labelPadding = 100;
 
-  const maxTime = schedulerMatrix.reduce((max, process) => Math.max(max, process.endTime), 0);
+  const maxTime = schedulerMatrix.reduce(
+    (max, process) => Math.max(max, process.endTime),
+    0
+  );
   const chartHeight = (barHeight + barPadding) * schedulerMatrix.length + 60;
   const chartWidth = 800;
 
@@ -25,14 +28,21 @@ export default function GanttChart({ schedulerMatrix, schedulerType }) {
   }, [currentMaxTime, maxTime]);
 
   return (
-    <svg className={s.ganttChartWrapper} width={chartWidth + labelPadding} height={chartHeight}>
+    <svg
+      className={s.ganttChartWrapper}
+      width={chartWidth + labelPadding}
+      height={chartHeight}
+    >
       {schedulerMatrix.map((process, index) => {
         if (process.startTime > currentMaxTime) {
           return null;
         }
 
-        const barWidth = (Math.min(process.endTime, currentMaxTime) - process.startTime) / maxTime * chartWidth;
-        const x = process.startTime / maxTime * chartWidth + labelPadding;
+        const barWidth =
+          ((Math.min(process.endTime, currentMaxTime) - process.startTime) /
+            maxTime) *
+          chartWidth;
+        const x = (process.startTime / maxTime) * chartWidth + labelPadding;
         const y = index * (barHeight + barPadding);
 
         return (
@@ -42,24 +52,32 @@ export default function GanttChart({ schedulerMatrix, schedulerType }) {
               y={y}
               width={barWidth}
               height={barHeight}
-              fill={'#3498db'}
-            >
-            </rect>
+              fill={process.isOverload ? "#e74c3c" : "#3498db"}
+            />
             <text
-                className={s.processName}
+              className={s.processName}
               x={labelPadding - 5}
               y={y + barHeight / 2}
               dy=".35em"
               textAnchor="end"
               fill="#000"
             >
-              {`Processo ${process.id}`}
+              {process.isOverload ? "Overload" : `Processo ${process.id}`}
             </text>
           </g>
         );
       })}
       {[...Array(currentMaxTime + 1)].map((_, i) => (
-        <text key={i} x={i / maxTime * chartWidth + labelPadding - 5} y={chartHeight - 15} dy=".71em" textAnchor="middle" fill="#000">{i}</text>
+        <text
+          key={i}
+          x={(i / maxTime) * chartWidth + labelPadding - 5}
+          y={chartHeight - 15}
+          dy=".71em"
+          textAnchor="middle"
+          fill="#000"
+        >
+          {i}
+        </text>
       ))}
     </svg>
   );
