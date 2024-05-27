@@ -39,19 +39,19 @@ export default function EarliestDeadline({
           arrivalTime: index,
         }));
 
-      setEdfProcesses(sortedProcesses);
+      setEdfProcesses([...sortedProcesses]);
     }
   }, [processes]);
 
   // Função para iniciar o EDF
   const startEDF = () => {
-    if (processes.length > 0) {
+    if (edfProcesses.length > 0) { 
       setReset(false);
       setStartScheduler(true);
       setRamProcesses(edfProcesses);
 
       let currentTime = 0;
-      const sortedProcesses = processes
+      const sortedProcesses = edfProcesses
         .filter((process) => process.status === "Waiting")
         .sort((a, b) => {
           if (a.deadline === b.deadline) {
