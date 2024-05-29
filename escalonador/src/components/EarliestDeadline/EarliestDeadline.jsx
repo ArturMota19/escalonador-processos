@@ -1,10 +1,4 @@
-// Components
-
-// Images
-
-// Imports
 import { useEffect, useState } from "react";
-// Styles
 import s from "./EarliestDeadline.module.css";
 import GanttChart from "../GanttChart/GanttChart";
 
@@ -37,6 +31,7 @@ export default function EarliestDeadline({
         .map((process, index) => ({
           ...process,
           arrivalTime: index,
+          segments: [],
         }));
 
       setEdfProcesses([...sortedProcesses]);
@@ -45,13 +40,14 @@ export default function EarliestDeadline({
 
   // Função para iniciar o EDF
   const startEDF = () => {
-    if (edfProcesses.length > 0) { 
+    if (edfProcesses.length > 0) {
       setReset(false);
       setStartScheduler(true);
-      setRamProcesses(edfProcesses);
+      const processesCopy = [...edfProcesses]; // Cópia dos processos ordenados
+      setRamProcesses(processesCopy); // Passa a cópia para o estado
 
       let currentTime = 0;
-      const sortedProcesses = edfProcesses
+      const sortedProcesses = processesCopy
         .filter((process) => process.status === "Waiting")
         .sort((a, b) => {
           if (a.deadline === b.deadline) {
@@ -60,12 +56,20 @@ export default function EarliestDeadline({
           return a.deadline - b.deadline;
         });
 
-      const newSchedulerMatrix = [];
-      let processQueue = [...sortedProcesses];
+      const processMap = new Map(
+        sortedProcesses.map((process) => [process.id, { ...process }])
+      );
 
-      while (processQueue.length > 0) {
-        const process = processQueue.shift();
-        const startTime = Math.max(currentTime, process.arrival);
+      while (sortedProcesses.some((process) => process.time > 0)) {
+        const process = sortedProcesses.find(
+          (p) => p.time > 0 && p.arrival <= currentTime
+        );
+        if (!process) {
+          currentTime++;
+          continue;
+        }
+
+        const startTime = currentTime;
         let remainingTime = process.time;
 
         if (remainingTime > quantum) {
@@ -73,58 +77,99 @@ export default function EarliestDeadline({
           const endTime = parseInt(startTime) + parseInt(quantum);
           const overloadStartTime = endTime;
           const overloadEndTime = parseInt(overloadStartTime) + overload;
-          console.log("startTime:", startTime);
-          console.log("quantum:", quantum);
-          console.log("endTime:", endTime);
 
           currentTime = overloadEndTime;
 
-          // Atualizando deadline e tempo do processo
-          // IMPORTANTE
-          // process.deadline -= (quantum + overload); IMPORTANTE
+          // if (process.deadline < endTime) {
+          //   const startFinishedDeadlineTime = process.deadline + 1;
+          //   const endFinishedDeadlineTime = endTime;
+
+          //   processMap.get(process.id).segments.push({
+          //     startTime: startFinishedDeadlineTime,
+          //     endTime: endFinishedDeadlineTime,
+          //     isOverload: false,
+          //     isDeadlineFinished: true,
+          //     status: "DeadlineFinished",
+          //   });
+          // }
+
           process.time = remainingTime;
 
-          // Adiciona o período de execução e sobrecarga ao schedulerMatrix
-          newSchedulerMatrix.push({ id: process.id, startTime, endTime });
-          newSchedulerMatrix.push({
-            id: `overload-${process.id}`,
+          // Adiciona o período de execução e sobrecarga aos segmentos do processo
+          processMap.get(process.id).segments.push({
+            startTime,
+            endTime,
+            isOverload: false,
+            status: process.status,
+            deadline: process.deadline,
+          });
+          processMap.get(process.id).segments.push({
             startTime: overloadStartTime,
             endTime: overloadEndTime,
             isOverload: true,
+            status: process.status,
+            deadline: process.deadline,
           });
 
           // Reordena os processos pela deadline atualizada
-          processQueue.push(process);
-          processQueue.sort((a, b) => {
+          sortedProcesses.sort((a, b) => {
             if (a.deadline === b.deadline) {
               return a.arrival - b.arrival;
             }
             return a.deadline - b.deadline;
           });
         } else {
-          const endTime = +startTime + remainingTime;
+          const endTime = parseInt(startTime) + remainingTime;
           currentTime = endTime;
-          newSchedulerMatrix.push({ id: process.id, startTime, endTime });
+
+          // if (process.deadline < endTime) {
+          //   const startFinishedDeadlineTime = parseInt(process.deadline) + 1;
+          //   const endFinishedDeadlineTime = endTime;
+          //   console.log('oi')
+
+          //   processMap.get(process.id).segments.push({
+          //     startTime: startFinishedDeadlineTime,
+          //     endTime: endFinishedDeadlineTime,
+          //     isOverload: false,
+          //     isDeadlineFinished: true,
+          //     status: "DeadlineFinished",
+          //   });
+          // }
+          process.time = 0;
+
+          processMap.get(process.id).segments.push({
+            startTime,
+            endTime,
+            isOverload: false,
+            status: process.status,
+            deadline: process.deadline,
+          });
         }
       }
 
       setTurnAroundTime(
         (
-          newSchedulerMatrix.reduce(
-            (acc, process) => acc + (process.endTime - process.startTime),
+          Array.from(processMap.values()).reduce(
+            (acc, process) =>
+              acc +
+              process.segments.reduce(
+                (segAcc, segment) =>
+                  segAcc + (segment.endTime - segment.startTime),
+                0
+              ),
             0
-          ) / newSchedulerMatrix.length
+          ) / processMap.size
         ).toFixed(2)
       );
 
-      setSchedulerMatrix(newSchedulerMatrix);
+      setSchedulerMatrix(Array.from(processMap.values()));
     }
   };
 
   // Função para resetar o EDF
   const resetEDF = () => {
     setStartScheduler(false);
-    setRamProcesses([]);
+    setRamProcesses([...edfProcesses]);
     setTurnAroundTime(0);
     setReset(true);
     setSchedulerMatrix([]);
