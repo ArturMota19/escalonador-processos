@@ -43,8 +43,8 @@ export default function EarliestDeadline({
     if (edfProcesses.length > 0) {
       setReset(false);
       setStartScheduler(true);
-      const processesCopy = [...edfProcesses]; // Cópia dos processos ordenados
-      setRamProcesses(processesCopy); // Passa a cópia para o estado
+      const processesCopy = [...edfProcesses];
+      setRamProcesses(processesCopy);
 
       let currentTime = 0;
       const sortedProcesses = processesCopy
@@ -72,6 +72,7 @@ export default function EarliestDeadline({
         const startTime = currentTime;
         let remainingTime = process.time;
 
+        // Quantidade de tempo maior que o quantum
         if (remainingTime > quantum) {
           remainingTime -= quantum;
           const endTime = parseInt(startTime) + parseInt(quantum);
@@ -80,35 +81,52 @@ export default function EarliestDeadline({
 
           currentTime = overloadEndTime;
 
-          // if (process.deadline < endTime) {
-          //   const startFinishedDeadlineTime = process.deadline + 1;
-          //   const endFinishedDeadlineTime = endTime;
+          // Se o deadline esta entre o inicio e o final do processo
+          if (process.deadline < endTime && process.deadline > startTime) {
+            const startFinishedDeadlineTime = process.deadline + 1;
 
-          //   processMap.get(process.id).segments.push({
-          //     startTime: startFinishedDeadlineTime,
-          //     endTime: endFinishedDeadlineTime,
-          //     isOverload: false,
-          //     isDeadlineFinished: true,
-          //     status: "DeadlineFinished",
-          //   });
-          // }
+            processMap.get(process.id).segments.push({
+              startTime: startTime,
+              endTime: process.deadline,
+              isOverload: false,
+              isDeadlineFinished: false,
+            });
+            processMap.get(process.id).segments.push({
+              startTime: startFinishedDeadlineTime,
+              endTime: endTime,
+              isOverload: false,
+              isDeadlineFinished: true,
+            });
+          } else if (
+            // Se o deadline esta antes do inicio e do final do processo
+            process.deadline < endTime &&
+            process.deadline < startTime
+          ) {
+            processMap.get(process.id).segments.push({
+              startTime,
+              endTime,
+              isOverload: false,
+              isDeadlineFinished: true,
+            });
+          } else if (process.deadline > endTime) {
+            // Se o deadline esta depois do final do processo
+            // Adiciona o período de execução aos segmentos do processo
+            processMap.get(process.id).segments.push({
+              startTime,
+              endTime,
+              isOverload: false,
+              isDeadlineFinished: false,
+            });
+          }
 
           process.time = remainingTime;
 
-          // Adiciona o período de execução e sobrecarga aos segmentos do processo
-          processMap.get(process.id).segments.push({
-            startTime,
-            endTime,
-            isOverload: false,
-            status: process.status,
-            deadline: process.deadline,
-          });
+          // Adiciona o período de sobrecarga aos segmentos do processo
           processMap.get(process.id).segments.push({
             startTime: overloadStartTime,
             endTime: overloadEndTime,
             isOverload: true,
-            status: process.status,
-            deadline: process.deadline,
+            isDeadlineFinished: false,
           });
 
           // Reordena os processos pela deadline atualizada
@@ -119,30 +137,39 @@ export default function EarliestDeadline({
             return a.deadline - b.deadline;
           });
         } else {
+          // Quantidade de tempo menor que o quantum
           const endTime = parseInt(startTime) + remainingTime;
           currentTime = endTime;
 
-          // if (process.deadline < endTime) {
-          //   const startFinishedDeadlineTime = parseInt(process.deadline) + 1;
-          //   const endFinishedDeadlineTime = endTime;
-          //   console.log('oi')
+          // Se o deadline esta entre o inicio e o final do processo
+          if (process.deadline < endTime && process.deadline > startTime) {
+            const startFinishedDeadlineTime = process.deadline + 1;
 
-          //   processMap.get(process.id).segments.push({
-          //     startTime: startFinishedDeadlineTime,
-          //     endTime: endFinishedDeadlineTime,
-          //     isOverload: false,
-          //     isDeadlineFinished: true,
-          //     status: "DeadlineFinished",
-          //   });
-          // }
+            processMap.get(process.id).segments.push({
+              startTime: startFinishedDeadlineTime,
+              endTime,
+              isOverload: false,
+              isDeadlineFinished: true,
+            });
+          } else if (
+            process.deadline < endTime &&
+            process.deadline < startTime
+            // Se o deadline esta antes do inicio e do final do processo
+          ) {
+            processMap.get(process.id).segments.push({
+              startTime,
+              endTime,
+              isOverload: false,
+              isDeadlineFinished: true,
+            });
+          }
           process.time = 0;
-
+          
+            // Se o deadline esta depois do final do processo
           processMap.get(process.id).segments.push({
             startTime,
             endTime,
             isOverload: false,
-            status: process.status,
-            deadline: process.deadline,
           });
         }
       }
