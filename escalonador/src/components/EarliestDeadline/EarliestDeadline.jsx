@@ -43,8 +43,8 @@ export default function EarliestDeadline({
     if (edfProcesses.length > 0) {
       setReset(false);
       setStartScheduler(true);
-      const processesCopy = [...edfProcesses];
-      setRamProcesses(processesCopy);
+      const processesCopy = [...edfProcesses]; // Cópia dos processos ordenados
+      setRamProcesses(processesCopy); // Passa a cópia para o estado
 
       let currentTime = 0;
       const sortedProcesses = processesCopy
@@ -108,9 +108,9 @@ export default function EarliestDeadline({
               isOverload: false,
               isDeadlineFinished: true,
             });
-          } else if (process.deadline > endTime) {
+          } else {
             // Se o deadline esta depois do final do processo
-            // Adiciona o período de execução aos segmentos do processo
+            // Adiciona o período de execução e sobrecarga aos segmentos do processo
             processMap.get(process.id).segments.push({
               startTime,
               endTime,
@@ -121,7 +121,6 @@ export default function EarliestDeadline({
 
           process.time = remainingTime;
 
-          // Adiciona o período de sobrecarga aos segmentos do processo
           processMap.get(process.id).segments.push({
             startTime: overloadStartTime,
             endTime: overloadEndTime,
@@ -162,15 +161,17 @@ export default function EarliestDeadline({
               isOverload: false,
               isDeadlineFinished: true,
             });
+          } else {
+            // Se o deadline esta depois do final do processo
+            processMap.get(process.id).segments.push({
+              startTime,
+              endTime,
+              isOverload: false,
+              isDeadlineFinished: false
+            });
           }
           process.time = 0;
-          
-            // Se o deadline esta depois do final do processo
-          processMap.get(process.id).segments.push({
-            startTime,
-            endTime,
-            isOverload: false,
-          });
+
         }
       }
 

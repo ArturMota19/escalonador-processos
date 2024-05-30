@@ -14,7 +14,7 @@ export default function GanttChart({ schedulerMatrix, schedulerType }) {
 
   const maxTime = schedulerMatrix.reduce(
     (max, process) =>
-      Math.max(max, ...process.segments.map((segment) => segment.endTime)),
+      Math.max(max, ...process.segments.map(segment => segment.endTime)),
     0
   );
   const chartHeight = (barHeight + barPadding) * schedulerMatrix.length + 60;
@@ -34,15 +34,9 @@ export default function GanttChart({ schedulerMatrix, schedulerType }) {
   }, [currentMaxTime, maxTime]);
 
   const getFillColor = (segment) => {
-    // Quantum
     if (segment.isOverload) {
       return colors.overload;
-      // Algoritmo EDf, processo passou do deadline
-    } else if (
-      segment.isDeadlineFinished &&
-      !segment.isOverload &&
-      schedulerType === "EDF"
-    ) {
+    } else if (segment.isDeadlineFinished) {
       return colors.deadlineFinished;
     } else {
       return colors.default;
