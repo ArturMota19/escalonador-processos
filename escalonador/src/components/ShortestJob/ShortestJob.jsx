@@ -42,36 +42,60 @@ export default function ShortestJob({
   }, [processes]);
 
   const startSJF = () => {
-    if (processes.length > 0) {
+    if (sjfProcesses.length > 0) {
       setReset(false);
       setStartScheduler(true);
-      setRamProcesses(sjfProcesses);
-
-      const sortedProcesses = sjfProcesses.sort((a, b) => {
-        if (a.arrival === b.arrival) {
-          return a.time - b.time;
-        }
-        return a.arrival - b.arrival;
-      });
-
+      const processesCopy = [...sjfProcesses];
+      setRamProcesses(processesCopy);
+  
       let currentTime = 0;
-      const newSchedulerMatrix = sortedProcesses.map((process) => {
-        const startTime = Math.max(currentTime, process.arrival);
+      const sortedProcesses = processesCopy
+        .filter((process) => process.status === "Waiting")
+        .sort((a, b) => a.time - b.time);
+  
+      const processMap = new Map(
+        sortedProcesses.map((process) => [process.id, { ...process, segments: [] }])
+      );
+  
+      while (sortedProcesses.some((process) => process.time > 0)) {
+        const process = sortedProcesses.find(
+          (p) => p.time > 0 && p.arrival <= currentTime
+        );
+        if (!process) {
+          currentTime++;
+          continue;
+        }
+  
+        const startTime = currentTime;
         const endTime = startTime + process.time;
         currentTime = endTime;
-        return { id: process.id, startTime, endTime };
-      });
-
+  
+        processMap.get(process.id).segments.push({
+          startTime,
+          endTime,
+          isOverload: false,
+          isDeadlineFinished: false,
+        });
+  
+        process.time = 0;
+      }
+  
       setTurnAroundTime(
         (
-          newSchedulerMatrix.reduce(
-            (acc, process) => acc + (process.endTime - process.startTime),
+          Array.from(processMap.values()).reduce(
+            (acc, process) =>
+              acc +
+              process.segments.reduce(
+                (segAcc, segment) =>
+                  segAcc + (segment.endTime - segment.startTime),
+                0
+              ),
             0
-          ) / newSchedulerMatrix.length
+          ) / processMap.size
         ).toFixed(2)
       );
-
-      setSchedulerMatrix(newSchedulerMatrix);
+  
+      setSchedulerMatrix(Array.from(processMap.values()));
     }
   };
 
