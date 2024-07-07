@@ -72,18 +72,23 @@ export default function EarliestDeadline({
         const startTime = currentTime;
         let remainingTime = process.time;
 
-        // Quantidade de tempo maior que o quantum
         if (remainingTime > quantum) {
           remainingTime -= quantum;
           const endTime = parseInt(startTime) + parseInt(quantum);
           const overloadStartTime = endTime;
-          const overloadEndTime = parseInt(overloadStartTime) + overload;
+          const overloadEndTime = parseInt(overloadStartTime) + parseInt(overload);
 
           currentTime = overloadEndTime;
-
-          // Se o deadline esta entre o inicio e o final do processo
-          if (process.deadline < endTime && process.deadline > startTime) {
-            const startFinishedDeadlineTime = process.deadline + 1;
+          if (process.deadline === startTime) { 
+            processMap.get(process.id).segments.push({
+              startTime: startTime,
+              endTime: endTime,
+              isOverload: false,
+              isDeadlineFinished: true,
+            });
+          }
+          else if (process.deadline < endTime && process.deadline > startTime) {
+            const startFinishedDeadlineTime = parseInt(process.deadline);
 
             processMap.get(process.id).segments.push({
               startTime: startTime,
@@ -97,11 +102,7 @@ export default function EarliestDeadline({
               isOverload: false,
               isDeadlineFinished: true,
             });
-          } else if (
-            // Se o deadline esta antes do inicio e do final do processo
-            process.deadline < endTime &&
-            process.deadline < startTime
-          ) {
+          } else if (process.deadline < startTime) {
             processMap.get(process.id).segments.push({
               startTime,
               endTime,
@@ -109,8 +110,6 @@ export default function EarliestDeadline({
               isDeadlineFinished: true,
             });
           } else {
-            // Se o deadline esta depois do final do processo
-            // Adiciona o período de execução e sobrecarga aos segmentos do processo
             processMap.get(process.id).segments.push({
               startTime,
               endTime,
@@ -128,7 +127,6 @@ export default function EarliestDeadline({
             isDeadlineFinished: false,
           });
 
-          // Reordena os processos pela deadline atualizada
           sortedProcesses.sort((a, b) => {
             if (a.deadline === b.deadline) {
               return a.arrival - b.arrival;
@@ -136,25 +134,25 @@ export default function EarliestDeadline({
             return a.deadline - b.deadline;
           });
         } else {
-          // Quantidade de tempo menor que o quantum
-          const endTime = parseInt(startTime) + remainingTime;
+          const endTime = parseInt(startTime) + parseInt(remainingTime);
           currentTime = endTime;
 
-          // Se o deadline esta entre o inicio e o final do processo
           if (process.deadline < endTime && process.deadline > startTime) {
-            const startFinishedDeadlineTime = process.deadline + 1;
+            const startFinishedDeadlineTime = parseInt(process.deadline) + 1;
 
             processMap.get(process.id).segments.push({
+              startTime: startTime,
+              endTime: process.deadline,
+              isOverload: false,
+              isDeadlineFinished: false,
+            });
+            processMap.get(process.id).segments.push({
               startTime: startFinishedDeadlineTime,
-              endTime,
+              endTime: endTime,
               isOverload: false,
               isDeadlineFinished: true,
             });
-          } else if (
-            process.deadline < endTime &&
-            process.deadline < startTime
-            // Se o deadline esta antes do inicio e do final do processo
-          ) {
+          } else if (process.deadline <= startTime) {
             processMap.get(process.id).segments.push({
               startTime,
               endTime,
@@ -162,16 +160,14 @@ export default function EarliestDeadline({
               isDeadlineFinished: true,
             });
           } else {
-            // Se o deadline esta depois do final do processo
             processMap.get(process.id).segments.push({
               startTime,
               endTime,
               isOverload: false,
-              isDeadlineFinished: false
+              isDeadlineFinished: false,
             });
           }
           process.time = 0;
-
         }
       }
 
