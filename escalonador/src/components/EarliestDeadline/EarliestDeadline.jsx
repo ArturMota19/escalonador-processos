@@ -36,7 +36,14 @@ export default function EarliestDeadline({
 
       setEdfProcesses([...sortedProcesses]);
     }
-  }, [processes]);
+  }, [processes, quantum, overload]); 
+
+  // // Efeito para atualizar o EDF ao modificar quantum e overload
+  // useEffect(() => {
+  //   if (startScheduler) {
+  //     startEDF();
+  //   }
+  // }, [quantum, overload]);
 
   // Função para iniciar o EDF
   const startEDF = () => {
@@ -76,19 +83,21 @@ export default function EarliestDeadline({
           remainingTime -= quantum;
           const endTime = parseInt(startTime) + parseInt(quantum);
           const overloadStartTime = endTime;
-          const overloadEndTime = parseInt(overloadStartTime) + parseInt(overload);
+          const overloadEndTime =
+            parseInt(overloadStartTime) + parseInt(overload);
 
           currentTime = overloadEndTime;
-          if (process.deadline === startTime) { 
+          if (process.deadline === startTime) {
             processMap.get(process.id).segments.push({
               startTime: startTime,
               endTime: endTime,
               isOverload: false,
               isDeadlineFinished: true,
             });
-          }
-          else if (process.deadline < endTime && process.deadline > startTime) {
-            const startFinishedDeadlineTime = parseInt(process.deadline);
+          } else if (
+            process.deadline < endTime &&
+            process.deadline > startTime
+          ) {
 
             processMap.get(process.id).segments.push({
               startTime: startTime,
@@ -97,7 +106,7 @@ export default function EarliestDeadline({
               isDeadlineFinished: false,
             });
             processMap.get(process.id).segments.push({
-              startTime: startFinishedDeadlineTime,
+              startTime: process.deadline,
               endTime: endTime,
               isOverload: false,
               isDeadlineFinished: true,
