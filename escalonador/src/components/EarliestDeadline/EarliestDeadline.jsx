@@ -147,7 +147,6 @@ export default function EarliestDeadline({
           currentTime = endTime;
 
           if (process.deadline < endTime && process.deadline > startTime) {
-            const startFinishedDeadlineTime = parseInt(process.deadline) + 1;
 
             processMap.get(process.id).segments.push({
               startTime: startTime,
@@ -156,7 +155,7 @@ export default function EarliestDeadline({
               isDeadlineFinished: false,
             });
             processMap.get(process.id).segments.push({
-              startTime: startFinishedDeadlineTime,
+              startTime: process.deadline,
               endTime: endTime,
               isOverload: false,
               isDeadlineFinished: true,

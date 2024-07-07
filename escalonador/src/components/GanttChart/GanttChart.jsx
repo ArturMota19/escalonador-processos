@@ -55,7 +55,6 @@ export default function GanttChart({ schedulerMatrix, schedulerType }) {
             if (segment.startTime > currentMaxTime) {
               return null;
             }
-            console.log(segment)
 
             const barWidth =
               ((Math.min(segment.endTime, currentMaxTime) - segment.startTime) /
