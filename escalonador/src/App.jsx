@@ -42,6 +42,8 @@ function App() {
 
   return (
     <main className={s.wrapperMain}>
+      <h2 className={s.titleName}>Escalonador de Processos - Trabalho MATA58</h2>
+      <p className={s.weNames}>Desenvolvido pelos Alunos Artur Mota, Bruna Anunciação, João Gabriel Lofiego e Victoria Beatriz.</p>
       <section className={s.internDiv}>
         <div className={s.scrollView}>
           <Header
@@ -84,6 +86,9 @@ function App() {
               overload={overload}
               selectedPagination={selectedPagination}
               pagination={pagination}
+              processes={processes}
+              setRamProcesses={setRamProcesses}
+              setReset={setReset}
             />
           )}
           {selectedButton === 3 && (

@@ -5,6 +5,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  gap: 1rem
+
+}
+.titleName{
+  font-size: 2rem;
+  font-weight: bold;
+  color: blue;
+
+}
+.weNames{
+  font-size: 1.25rem;
+  color: blue;
+
 }
 .internDiv{
   width: 95%;

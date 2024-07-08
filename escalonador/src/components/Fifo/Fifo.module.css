@@ -1,0 +1,49 @@
+.fifoWrapper {
+  width: 100%;
+
+  text-align: center;
+}
+
+.btnWrapper {
+  padding: 1rem 0;
+
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+}
+
+.btnWrapper button {
+  width: 30%;
+  padding: 0.5rem 1rem;
+  
+  border: none;
+  border-radius: 0.5rem;
+  
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #fff;
+
+  cursor: pointer;
+  transition: 1s;
+}
+
+.btnWrapper .startBtn {
+  background: rgb(29, 29, 255);
+}
+
+.btnWrapper .disabledBtn {
+  background: #ccc;
+
+  color: #000;
+
+  cursor: not-allowed;
+}
+
+.btnWrapper .resetBtn {
+  background:rgb(82, 82, 82);
+}
+
+.btnWrapper button:hover {
+  transform: scale(1.05);
+}
+

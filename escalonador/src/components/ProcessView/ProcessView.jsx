@@ -88,9 +88,13 @@ export default function ProcessView({ processes, setProcesses }) {
                   type="number"
                   name="processPage"
                   value={process.pages}
-                  onChange={(e) =>
-                    handleInputChange(process.id, "pages", e.target.value)
-                  }
+                  onChange={(e) => {
+                    if (e.target.value <= 10) {
+                      handleInputChange(process.id, "pages", e.target.value);
+                    }else{
+                      alert("O número máximo de páginas é 10")
+                    }
+                  }}
                 />
               </label>
             </div>
