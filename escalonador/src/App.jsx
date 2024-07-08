@@ -76,16 +76,12 @@ function App() {
               overload={overload}
               selectedPagination={selectedPagination}
               pagination={pagination}
+              processes={processes}
+              setRamProcesses={setRamProcesses}
+              setReset={setReset}
             />
           )}
-          {selectedButton === 2 && (
-            <Fifo
-              quantum={quantum}
-              overload={overload}
-              selectedPagination={selectedPagination}
-              pagination={pagination}
-            />
-          )}
+          {selectedButton === 2 && <Fifo quantum={quantum} overload={overload} selectedPagination={selectedPagination} pagination={pagination} />}
           {selectedButton === 3 && (
             <ShortestJob
               quantum={quantum}
@@ -98,7 +94,7 @@ function App() {
             />
           )}
           <div className={s.line} />
-          <MemoryView processes={ramProcesses} reset={reset}/>
+          <MemoryView processes={ramProcesses} reset={reset} />
         </div>
       </section>
     </main>
