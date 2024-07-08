@@ -65,6 +65,9 @@ function App() {
               overload={overload}
               selectedPagination={selectedPagination}
               pagination={pagination}
+              processes={processes}
+              setRamProcesses={setRamProcesses}
+              setReset={setReset}
             />
           )}
           {selectedButton === 1 && (
