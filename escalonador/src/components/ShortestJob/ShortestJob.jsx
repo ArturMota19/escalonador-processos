@@ -80,20 +80,16 @@ export default function ShortestJob({
         process.time = 0;
       }
   
-      setTurnAroundTime(
-        (
-          Array.from(processMap.values()).reduce(
-            (acc, process) =>
-              acc +
-              process.segments.reduce(
-                (segAcc, segment) =>
-                  segAcc + (segment.endTime - segment.startTime),
-                0
-              ),
-            0
-          ) / processMap.size
-        ).toFixed(2)
-      );
+      const turnAroundTimes = Array.from(processMap.values()).map((process) => {
+        const arrivalTime = process.arrival;
+        const completionTime = process.segments[process.segments.length - 1].endTime;
+        return completionTime - arrivalTime;
+      });
+  
+      const totalTurnAroundTime = turnAroundTimes.reduce((acc, time) => acc + time, 0);
+      const averageTurnAroundTime = (totalTurnAroundTime / turnAroundTimes.length).toFixed(2);
+  
+      setTurnAroundTime(averageTurnAroundTime);
   
       setSchedulerMatrix(Array.from(processMap.values()));
     }
