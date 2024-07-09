@@ -36,7 +36,7 @@ export default function EarliestDeadline({
 
       setEdfProcesses([...sortedProcesses]);
     }
-  }, [processes, quantum, overload]); 
+  }, [processes, quantum, overload]);
 
   // // Efeito para atualizar o EDF ao modificar quantum e overload
   // useEffect(() => {
@@ -98,15 +98,15 @@ export default function EarliestDeadline({
             process.deadline < endTime &&
             process.deadline > startTime
           ) {
-
+            const DeadlineFinished = parseInt(process.deadline) + 1;
             processMap.get(process.id).segments.push({
               startTime: startTime,
-              endTime: process.deadline,
+              endTime: DeadlineFinished,
               isOverload: false,
               isDeadlineFinished: false,
             });
             processMap.get(process.id).segments.push({
-              startTime: process.deadline,
+              startTime: DeadlineFinished,
               endTime: endTime,
               isOverload: false,
               isDeadlineFinished: true,
@@ -147,15 +147,16 @@ export default function EarliestDeadline({
           currentTime = endTime;
 
           if (process.deadline < endTime && process.deadline > startTime) {
+            const DeadlineFinished = parseInt(process.deadline) + 1;
 
             processMap.get(process.id).segments.push({
               startTime: startTime,
-              endTime: process.deadline,
+              endTime: DeadlineFinished,
               isOverload: false,
               isDeadlineFinished: false,
             });
             processMap.get(process.id).segments.push({
-              startTime: process.deadline,
+              startTime: DeadlineFinished,
               endTime: endTime,
               isOverload: false,
               isDeadlineFinished: true,
@@ -176,19 +177,14 @@ export default function EarliestDeadline({
             });
           }
           process.time = 0;
+          processMap.get(process.id).endTime = endTime; 
         }
       }
 
       setTurnAroundTime(
         (
           Array.from(processMap.values()).reduce(
-            (acc, process) =>
-              acc +
-              process.segments.reduce(
-                (segAcc, segment) =>
-                  segAcc + (segment.endTime - segment.startTime),
-                0
-              ),
+            (acc, process) => acc + (process.endTime - process.arrival),
             0
           ) / processMap.size
         ).toFixed(2)
