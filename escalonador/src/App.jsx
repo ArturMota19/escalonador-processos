@@ -78,6 +78,9 @@ function App() {
               overload={overload}
               selectedPagination={selectedPagination}
               pagination={pagination}
+              processes={processes}
+              setRamProcesses={setRamProcesses}
+              setReset={setReset}
             />
           )}
           {selectedButton === 2 && (
@@ -103,7 +106,7 @@ function App() {
             />
           )}
           <div className={s.line} />
-          <MemoryView processes={ramProcesses} reset={reset}/>
+          <MemoryView processes={ramProcesses} reset={reset} />
         </div>
       </section>
     </main>
