@@ -41,7 +41,7 @@ export default function Fifo({
   
       let currentTime = 0;
       const processMap = new Map(
-        processesCopy.map((process) => [process.id, { ...process, segments: [] }])
+        processesCopy.map((process) => [process.id, { ...process, segments: [], completionTime: 0 }])
       );
   
       while (processesCopy.some((process) => process.time > 0)) {
@@ -64,6 +64,7 @@ export default function Fifo({
           isDeadlineFinished: false,
         });
   
+        processMap.get(process.id).completionTime = endTime;
         process.time = 0;
       }
   
@@ -71,12 +72,7 @@ export default function Fifo({
         (
           Array.from(processMap.values()).reduce(
             (acc, process) =>
-              acc +
-              process.segments.reduce(
-                (segAcc, segment) =>
-                  segAcc + (segment.endTime - segment.startTime),
-                0
-              ),
+              acc + (process.completionTime - process.arrival),
             0
           ) / processMap.size
         ).toFixed(2)
