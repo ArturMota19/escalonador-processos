@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 // Styles
 import s from "./GanttChart.module.css";
 
-export default function GanttChart({ schedulerMatrix, schedulerType }) {
+export default function GanttChart({ schedulerMatrix, schedulerType, delay }) {
   const barHeight = 30;
   const barPadding = 10;
   const labelPadding = 100;
@@ -23,15 +23,15 @@ export default function GanttChart({ schedulerMatrix, schedulerType }) {
   const [currentMaxTime, setCurrentMaxTime] = useState(0);
 
   useEffect(() => {
+    let intervalTime = delay * 1000;
     const interval = setInterval(() => {
-      setCurrentMaxTime((time) => time + 1);
+      setCurrentMaxTime((prev) => Math.min(prev + 1, maxTime));
       if (currentMaxTime >= maxTime) {
         clearInterval(interval);
       }
-    }, 1000);
-
+    }, intervalTime);
     return () => clearInterval(interval);
-  }, [currentMaxTime, maxTime]);
+  }, [currentMaxTime, maxTime, delay]);
 
   const getFillColor = (segment) => {
     if (segment.isOverload) {

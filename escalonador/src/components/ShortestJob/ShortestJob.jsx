@@ -13,6 +13,7 @@ export default function ShortestJob({
   overload,
   processes,
   setReset,
+  delay
 }) {
   const [startScheduler, setStartScheduler] = useState(false);
   const [turnAroundTime, setTurnAroundTime] = useState(0);
@@ -113,7 +114,7 @@ export default function ShortestJob({
       {startScheduler && (
         <div>
           <p>TurnAround: {turnAroundTime}</p>
-          <GanttChart schedulerMatrix={schedulerMatrix} schedulerType="SJF" />
+          <GanttChart schedulerMatrix={schedulerMatrix} schedulerType="SJF" delay={delay} />
         </div>
       )}
     </div>

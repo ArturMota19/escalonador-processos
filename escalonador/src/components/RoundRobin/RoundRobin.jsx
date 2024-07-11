@@ -9,7 +9,7 @@ import GanttChart from "../GanttChart/GanttChart";
 // Styles
 import s from "./RoundRobin.module.css";
 
-export default function RoundRobin({ quantum, overload, processes, setReset }) {
+export default function RoundRobin({ quantum, overload, processes, setReset, delay }) {
   const [startScheduler, setStartScheduler] = useState(false);
   const [turnAroundTime, setTurnAroundTime] = useState(0);
   const [rrProcesses, setrrProcesses] = useState([]);
@@ -124,7 +124,7 @@ export default function RoundRobin({ quantum, overload, processes, setReset }) {
       {startScheduler && (
         <div>
           <p>TurnAround: {turnAroundTime}</p>
-          <GanttChart schedulerMatrix={schedulerMatrix} schedulerType="RR" />
+          <GanttChart schedulerMatrix={schedulerMatrix} schedulerType="RR" delay={delay} />
         </div>
       )}
     </div>

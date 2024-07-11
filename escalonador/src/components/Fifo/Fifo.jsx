@@ -9,6 +9,7 @@ export default function Fifo({
   overload,
   processes,
   setReset,
+  delay
 }) {
   const [startScheduler, setStartScheduler] = useState(false);
   const [turnAroundTime, setTurnAroundTime] = useState(0);
@@ -102,7 +103,7 @@ export default function Fifo({
       {startScheduler && (
         <div>
           <p>TurnAround: {turnAroundTime}</p>
-          <GanttChart schedulerMatrix={schedulerMatrix} schedulerType="FIFO" />
+          <GanttChart schedulerMatrix={schedulerMatrix} schedulerType="FIFO" delay={delay} />
         </div>
       )}
     </div>

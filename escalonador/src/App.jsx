@@ -60,6 +60,7 @@ function App() {
               overload={overload}
               processes={processes}
               setReset={setReset}
+              delay={delay}
             />
           )}
           {selectedButton === 1 && (
@@ -68,6 +69,7 @@ function App() {
               overload={overload}
               processes={processes}
               setReset={setReset}
+              delay={delay}
             />
           )}
           {selectedButton === 2 && (
@@ -76,6 +78,7 @@ function App() {
               overload={overload}
               processes={processes}
               setReset={setReset}
+              delay={delay}
             />
           )}
           {selectedButton === 3 && (
@@ -84,6 +87,7 @@ function App() {
               overload={overload}
               processes={processes}
               setReset={setReset}
+              delay={delay}
             />
           )}
           <div className={s.line} />

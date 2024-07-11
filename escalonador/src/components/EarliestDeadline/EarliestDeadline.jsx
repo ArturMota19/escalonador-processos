@@ -7,6 +7,7 @@ export default function EarliestDeadline({
   overload,
   processes,
   setReset,
+  delay
 }) {
   // Estados do componente
   const [startScheduler, setStartScheduler] = useState(false);
@@ -215,7 +216,7 @@ export default function EarliestDeadline({
       {startScheduler && (
         <div>
           <p>TurnAround: {turnAroundTime}</p>
-          <GanttChart schedulerMatrix={schedulerMatrix} schedulerType="EDF" />
+          <GanttChart schedulerMatrix={schedulerMatrix} schedulerType="EDF" delay={delay} />
         </div>
       )}
     </div>
