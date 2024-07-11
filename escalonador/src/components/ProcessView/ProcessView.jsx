@@ -13,7 +13,6 @@ export default function ProcessView({ processes, setProcesses }) {
         deadline: 0,
         arrival: 0,
         priority: 0,
-        pages: 1,
         status: "Waiting",
       },
     ]);
@@ -58,7 +57,7 @@ export default function ProcessView({ processes, setProcesses }) {
                 onClick={handleRemove(process.id)}
               />
             </div>
-            <div className={s.threeInputs}>
+            <div className={s.twoInputs}>
               <label>
                 Prioridade:
                 <input
@@ -70,7 +69,6 @@ export default function ProcessView({ processes, setProcesses }) {
                   }
                 />
               </label>
-
               <label>
                 Tempo:
                 <input
@@ -80,21 +78,6 @@ export default function ProcessView({ processes, setProcesses }) {
                   onChange={(e) =>
                     handleInputChange(process.id, "time", e.target.value)
                   }
-                />
-              </label>
-              <label>
-                Páginas:
-                <input
-                  type="number"
-                  name="processPage"
-                  value={process.pages}
-                  onChange={(e) => {
-                    if (e.target.value <= 10) {
-                      handleInputChange(process.id, "pages", e.target.value);
-                    }else{
-                      alert("O número máximo de páginas é 10")
-                    }
-                  }}
                 />
               </label>
             </div>
