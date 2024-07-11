@@ -9,10 +9,10 @@ import ufba from '/ufba.png'
 import s from './Header.module.css';
 import { useEffect } from 'react';
 
-export default function Header({selectedButton, setSelectedButton, selectedPagination, setSelectedPagination, quantum, setQuantum, overload, setOverload, pagination, setPagination}) {
+export default function Header({selectedButton, setSelectedButton, quantum, setQuantum, overload, setOverload, delay, setDelay}) {
   // useEffect(() => {
 
-  // },[quantum, setQuantum, overload, setOverload, pagination, setPagination])
+  // },[quantum, setQuantum, overload, setOverload])
   return (
     <header className={s.wrapperHeader}>
       <div className={s.wrapperLogos}>
@@ -57,22 +57,13 @@ export default function Header({selectedButton, setSelectedButton, selectedPagin
           <p>Sobrecarga:</p>
           <input onChange={(e) => setOverload(e.target.value)} value={overload} className={s.inputStyle} type='number' min='1' max='100' step='1' />
         </div>
-        <div className={s.wrapperPagination}>
-          <p>Paginação:</p>
-          <button
-            className={selectedPagination == 0 ? s.selectedButton : s.notSelectedButton}
-            onClick={() => setSelectedPagination(0)}
-          >FIFO</button>
-          <button
-            className={selectedPagination == 1 ? s.selectedButton : s.notSelectedButton}
-            onClick={() => setSelectedPagination(1)}
-          >LRU</button>
-          <div className={s.wrapperPaginationSeconds}>
-            <input onChange={(e) => setPagination(parseFloat(e.target.value))} type="range" min="0.125" max="2" step={0.125} />
-            <p>{pagination}s</p>
+        <div className={s.wrapperDelay}>
+          <div className={s.wrapperDelaySeconds}>
+            <p>Delay: </p>
+            <input onChange={(e) => setDelay(parseFloat(e.target.value))} type="range" min="0.125" max="2" step={0.125} />
+            <p>{delay}</p>
           </div>
         </div>
-        
       </section>
     </header>
   );

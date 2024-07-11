@@ -54,7 +54,7 @@
   font-size: 1.25rem;
   color: #fff;
 }
-.wrapperPagination{
+.wrapperDelay{
   display: flex;
   flex-direction: column;
   gap: .25rem;
@@ -70,7 +70,7 @@
   box-sizing: border-box;
   padding-left: .5rem;
 }
-.wrapperPagination button{
+.wrapperDelay button{
   width: 15rem;
   height: 2rem;
   border: none;
@@ -79,9 +79,10 @@
   cursor: pointer;
   color: #fff;
 }
-.wrapperPaginationSeconds{
+.wrapperDelaySeconds{
   width: 5rem;
   display: flex;
+  justify-content: center;
   gap: .5rem;
 }
 .wrapperHeader img{

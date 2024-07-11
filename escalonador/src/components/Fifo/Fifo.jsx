@@ -7,10 +7,7 @@ import GanttChart from "../GanttChart/GanttChart";
 export default function Fifo({
   quantum,
   overload,
-  selectedPagination,
-  pagination,
   processes,
-  setRamProcesses,
   setReset,
 }) {
   const [startScheduler, setStartScheduler] = useState(false);
@@ -37,7 +34,6 @@ export default function Fifo({
       setReset(false);
       setStartScheduler(true);
       const processesCopy = [...fifoProcesses];
-      setRamProcesses(processesCopy);
   
       let currentTime = 0;
       const processMap = new Map(
@@ -84,7 +80,6 @@ export default function Fifo({
 
   const resetFIFO = () => {
     setStartScheduler(false);
-    setRamProcesses([]);
     setTurnAroundTime(0);
     setReset(true);
     setSchedulerMatrix([]);

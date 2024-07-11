@@ -9,7 +9,7 @@ import GanttChart from "../GanttChart/GanttChart";
 // Styles
 import s from "./RoundRobin.module.css";
 
-export default function RoundRobin({ quantum, overload, selectedPagination, pagination, processes, setRamProcesses, setReset }) {
+export default function RoundRobin({ quantum, overload, processes, setReset }) {
   const [startScheduler, setStartScheduler] = useState(false);
   const [turnAroundTime, setTurnAroundTime] = useState(0);
   const [rrProcesses, setrrProcesses] = useState([]);
@@ -38,7 +38,6 @@ export default function RoundRobin({ quantum, overload, selectedPagination, pagi
       setReset(false);
       setStartScheduler(true);
       const processesCopy = [...rrProcesses]; // Cópia dos processos ordenados
-      setRamProcesses(processesCopy); // Passa a cópia para o estado
 
       let currentTime = 0;
       let sortedProcesses = processes
@@ -107,7 +106,6 @@ export default function RoundRobin({ quantum, overload, selectedPagination, pagi
 
   const resetRR = () => {
     setStartScheduler(false);
-    setRamProcesses([]);
     setTurnAroundTime(0);
     setReset(true);
     setSchedulerMatrix([]);

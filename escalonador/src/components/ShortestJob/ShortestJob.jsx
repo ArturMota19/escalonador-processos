@@ -11,10 +11,7 @@ import GanttChart from "../GanttChart/GanttChart";
 export default function ShortestJob({
   quantum,
   overload,
-  selectedPagination,
-  pagination,
   processes,
-  setRamProcesses,
   setReset,
 }) {
   const [startScheduler, setStartScheduler] = useState(false);
@@ -46,7 +43,6 @@ export default function ShortestJob({
       setReset(false);
       setStartScheduler(true);
       const processesCopy = [...sjfProcesses];
-      setRamProcesses(processesCopy);
   
       let currentTime = 0;
       const sortedProcesses = processesCopy
@@ -97,7 +93,6 @@ export default function ShortestJob({
 
   const resetSJF = () => {
     setStartScheduler(false);
-    setRamProcesses([]);
     setTurnAroundTime(0);
     setReset(true);
     setSchedulerMatrix([]);

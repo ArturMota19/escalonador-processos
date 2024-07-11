@@ -5,10 +5,7 @@ import GanttChart from "../GanttChart/GanttChart";
 export default function EarliestDeadline({
   quantum,
   overload,
-  selectedPagination,
-  pagination,
   processes,
-  setRamProcesses,
   setReset,
 }) {
   // Estados do componente
@@ -51,7 +48,6 @@ export default function EarliestDeadline({
       setReset(false);
       setStartScheduler(true);
       const processesCopy = [...edfProcesses]; // Cópia dos processos ordenados
-      setRamProcesses(processesCopy); // Passa a cópia para o estado
 
       let currentTime = 0;
       const sortedProcesses = processesCopy
@@ -197,7 +193,6 @@ export default function EarliestDeadline({
   // Função para resetar o EDF
   const resetEDF = () => {
     setStartScheduler(false);
-    setRamProcesses([...edfProcesses]);
     setTurnAroundTime(0);
     setReset(true);
     setSchedulerMatrix([]);

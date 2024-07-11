@@ -66,11 +66,6 @@
     align-items: center;
 }
 
-.threeInputs {
-    display: flex;
-    justify-content: space-between;
-}
-
 .processViewWrapper label {
     display: flex;
     flex-direction: column;
