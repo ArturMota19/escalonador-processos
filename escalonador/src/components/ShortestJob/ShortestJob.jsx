@@ -39,7 +39,6 @@ export default function ShortestJob({
   }, [processes]);
 
   const startSJF = () => {
-    console.log('foi')
     if (sjfProcesses.length > 0) {
       setReset(false);
       setStartScheduler(true);
