@@ -100,14 +100,7 @@ export default function RoundRobin({ quantum, overload, processes, setReset, del
       rrProcesses.sort((a, b) => a.arrivalTime - b.arrivalTime);
       setSchedulerMatrix(rrProcesses);
 
-      setTurnAroundTime(
-        rrProcesses
-          .reduce((acc, value) => {
-            console.log(value);
-            return acc + (value.finalEndTime - value.firstArrivalTime) / rrProcesses.length;
-          }, 0)
-          .toFixed(2)
-      );
+      setTurnAroundTime(rrProcesses.reduce((acc, value) => acc + (value.finalEndTime - value.firstArrivalTime) / rrProcesses.length, 0).toFixed(2));
     }
   };
 
