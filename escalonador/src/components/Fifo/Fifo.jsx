@@ -30,6 +30,20 @@ export default function Fifo({
     }
   }, [processes]);
 
+  function callProcesses(){
+    if (processes.length > 0) {
+      const sortedProcesses = processes
+        .filter((process) => process.status === "Waiting")
+        .sort((a, b) => a.arrival - b.arrival)
+        .map((process, index) => ({
+          ...process,
+          arrivalTime: index,
+        }));
+
+      setFifoProcesses(sortedProcesses);
+    }
+  }
+
   const startFIFO = () => {
     if (fifoProcesses.length > 0) {
       setReset(false);
@@ -81,9 +95,9 @@ export default function Fifo({
 
   const resetFIFO = () => {
     setStartScheduler(false);
-    setTurnAroundTime(0);
     setReset(true);
     setSchedulerMatrix([]);
+    callProcesses();
   };
 
   return (
