@@ -48,7 +48,7 @@ export default function RoundRobin({ quantum, overload, processes, setReset, del
         .map((process, index) => ({
           ...process,
           arrivalTime: index,
-          firstArrivalTime: process.time,
+          firstArrivalTime: process.arrival,
           segments: [],
         }));
 
@@ -100,7 +100,7 @@ export default function RoundRobin({ quantum, overload, processes, setReset, del
       rrProcesses.sort((a, b) => a.arrivalTime - b.arrivalTime);
       setSchedulerMatrix(rrProcesses);
 
-      setTurnAroundTime((rrProcesses.reduce((acc, value) => acc + (value.finalEndTime - value.firstArrivalTime), 0) / rrProcesses.length).toFixed(2));
+      setTurnAroundTime(rrProcesses.reduce((acc, value) => acc + (value.finalEndTime - value.firstArrivalTime) / rrProcesses.length, 0).toFixed(2));
     }
   };
 
