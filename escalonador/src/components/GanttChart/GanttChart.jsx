@@ -10,15 +10,12 @@ export default function GanttChart({ schedulerMatrix, schedulerType, delay }) {
     default: "#3498db",
     overload: "#e74c3c",
     deadlineFinished: "#000000",
+    waiting: "#F1C40F",
   };
 
-  const maxTime = schedulerMatrix.reduce(
-    (max, process) =>
-      Math.max(max, ...process.segments.map(segment => segment.endTime)),
-    0
-  );
+  const maxTime = schedulerMatrix.reduce((max, process) => Math.max(max, ...process.segments.map((segment) => segment.endTime)), 0);
   const chartHeight = (barHeight + barPadding) * schedulerMatrix.length + 60;
-  const chartWidth = 800;
+  const chartWidth = document.getElementById("window").clientWidth - 2 * labelPadding;
 
   const [currentMaxTime, setCurrentMaxTime] = useState(0);
 
@@ -38,17 +35,15 @@ export default function GanttChart({ schedulerMatrix, schedulerType, delay }) {
       return colors.overload;
     } else if (segment.isDeadlineFinished) {
       return colors.deadlineFinished;
+    } else if (segment.isWaiting) {
+      return colors.waiting;
     } else {
       return colors.default;
     }
   };
 
   return (
-    <svg
-      className={s.ganttChartWrapper}
-      width={chartWidth + labelPadding}
-      height={chartHeight}
-    >
+    <svg className={s.ganttChartWrapper} width={chartWidth + labelPadding} height={chartHeight}>
       {schedulerMatrix.map((process, index) => (
         <g key={process.id}>
           {process.segments.map((segment, segmentIndex) => {
@@ -56,47 +51,19 @@ export default function GanttChart({ schedulerMatrix, schedulerType, delay }) {
               return null;
             }
 
-            const barWidth =
-              ((Math.min(segment.endTime, currentMaxTime) - segment.startTime) /
-                maxTime) *
-              chartWidth;
+            const barWidth = ((Math.min(segment.endTime, currentMaxTime) - segment.startTime) / maxTime) * chartWidth;
             const x = (segment.startTime / maxTime) * chartWidth + labelPadding;
             const y = index * (barHeight + barPadding);
 
-            return (
-              <rect
-                key={segmentIndex}
-                x={x}
-                y={y}
-                width={barWidth}
-                height={barHeight}
-                fill={getFillColor(segment)}
-                stroke="#000"
-                strokeWidth="1"
-              />
-            );
+            return <rect key={segmentIndex} x={x} y={y} width={barWidth} height={barHeight} fill={getFillColor(segment)} stroke="#000" strokeWidth="1" />;
           })}
-          <text
-            className={s.processName}
-            x={labelPadding - 5}
-            y={index * (barHeight + barPadding) + barHeight / 2}
-            dy=".35em"
-            textAnchor="end"
-            fill="#000"
-          >
+          <text className={s.processName} x={labelPadding - 5} y={index * (barHeight + barPadding) + barHeight / 2} dy=".35em" textAnchor="end" fill="#000">
             {`Processo ${process.id}`}
           </text>
         </g>
       ))}
       {[...Array(currentMaxTime + 1)].map((_, i) => (
-        <text
-          key={i}
-          x={(i / maxTime) * chartWidth + labelPadding - 5}
-          y={chartHeight - 15}
-          dy=".71em"
-          textAnchor="middle"
-          fill="#000"
-        >
+        <text key={i} x={(i / maxTime) * chartWidth + labelPadding - 5} y={chartHeight - 15} dy=".71em" textAnchor="middle" fill="#000">
           {i}
         </text>
       ))}

@@ -39,7 +39,7 @@ function App() {
     <main className={s.wrapperMain}>
       <h2 className={s.titleName}>Escalonador de Processos - Trabalho MATA58</h2>
       <p className={s.weNames}>Desenvolvido pelos Alunos Artur Mota, Bruna Anunciação, João Gabriel Lofiego e Victoria Beatriz.</p>
-      <section className={s.internDiv}>
+      <section className={s.internDiv} id="window">
         <div className={s.scrollView}>
           <Header
             selectedButton={selectedButton}
@@ -54,42 +54,10 @@ function App() {
           <div className={s.line} />
           <ProcessView processes={processes} setProcesses={setProcesses} />
           <div className={s.line} />
-          {selectedButton === 0 && (
-            <EarliestDeadline
-              quantum={quantum}
-              overload={overload}
-              processes={processes}
-              setReset={setReset}
-              delay={delay}
-            />
-          )}
-          {selectedButton === 1 && (
-            <RoundRobin
-              quantum={quantum}
-              overload={overload}
-              processes={processes}
-              setReset={setReset}
-              delay={delay}
-            />
-          )}
-          {selectedButton === 2 && (
-            <Fifo
-              quantum={quantum}
-              overload={overload}
-              processes={processes}
-              setReset={setReset}
-              delay={delay}
-            />
-          )}
-          {selectedButton === 3 && (
-            <ShortestJob
-              quantum={quantum}
-              overload={overload}
-              processes={processes}
-              setReset={setReset}
-              delay={delay}
-            />
-          )}
+          {selectedButton === 0 && <EarliestDeadline quantum={quantum} overload={overload} processes={processes} setReset={setReset} delay={delay} />}
+          {selectedButton === 1 && <RoundRobin quantum={quantum} overload={overload} processes={processes} setReset={setReset} delay={delay} />}
+          {selectedButton === 2 && <Fifo quantum={quantum} overload={overload} processes={processes} setReset={setReset} delay={delay} />}
+          {selectedButton === 3 && <ShortestJob quantum={quantum} overload={overload} processes={processes} setReset={setReset} delay={delay} />}
           <div className={s.line} />
         </div>
       </section>
