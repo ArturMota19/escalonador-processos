@@ -88,7 +88,7 @@ export default function EarliestDeadline({
               isDeadlineFinished: true,
             });
           } else if (realDeadline < endTime && realDeadline > startTime) {
-            const DeadlineFinished = parseInt(realDeadline) + 1;
+            const DeadlineFinished = parseInt(realDeadline) ;
             processMap.get(process.id).segments.push({
               startTime: startTime,
               endTime: DeadlineFinished,
@@ -137,7 +137,7 @@ export default function EarliestDeadline({
           currentTime = endTime;
 
           if (realDeadline < endTime && realDeadline > startTime) {
-            const DeadlineFinished = parseInt(realDeadline) + 1;
+            const DeadlineFinished = parseInt(realDeadline) ;
 
             processMap.get(process.id).segments.push({
               startTime: startTime,
