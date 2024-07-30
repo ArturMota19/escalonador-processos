@@ -36,13 +36,6 @@ export default function EarliestDeadline({
     }
   }, [processes, quantum, overload]);
 
-  // // Efeito para atualizar o EDF ao modificar quantum e overload
-  // useEffect(() => {
-  //   if (startScheduler) {
-  //     startEDF();
-  //   }
-  // }, [quantum, overload]);
-
   // Função para iniciar o EDF
   const startEDF = () => {
     if (edfProcesses.length > 0) {
@@ -75,6 +68,9 @@ export default function EarliestDeadline({
 
         const startTime = currentTime;
         let remainingTime = process.time;
+        const realDeadline =
+          parseInt(process.deadline) + parseInt(process.arrival);
+        console.log(realDeadline);
 
         if (remainingTime > quantum) {
           remainingTime -= quantum;
@@ -84,18 +80,15 @@ export default function EarliestDeadline({
             parseInt(overloadStartTime) + parseInt(overload);
 
           currentTime = overloadEndTime;
-          if (process.deadline === startTime) {
+          if (realDeadline === startTime) {
             processMap.get(process.id).segments.push({
               startTime: startTime,
               endTime: endTime,
               isOverload: false,
               isDeadlineFinished: true,
             });
-          } else if (
-            process.deadline < endTime &&
-            process.deadline > startTime
-          ) {
-            const DeadlineFinished = parseInt(process.deadline) + 1;
+          } else if (realDeadline < endTime && realDeadline > startTime) {
+            const DeadlineFinished = parseInt(realDeadline) + 1;
             processMap.get(process.id).segments.push({
               startTime: startTime,
               endTime: DeadlineFinished,
@@ -108,7 +101,7 @@ export default function EarliestDeadline({
               isOverload: false,
               isDeadlineFinished: true,
             });
-          } else if (process.deadline < startTime) {
+          } else if (realDeadline < startTime) {
             processMap.get(process.id).segments.push({
               startTime,
               endTime,
@@ -143,8 +136,8 @@ export default function EarliestDeadline({
           const endTime = parseInt(startTime) + parseInt(remainingTime);
           currentTime = endTime;
 
-          if (process.deadline < endTime && process.deadline > startTime) {
-            const DeadlineFinished = parseInt(process.deadline) + 1;
+          if (realDeadline < endTime && realDeadline > startTime) {
+            const DeadlineFinished = parseInt(realDeadline) + 1;
 
             processMap.get(process.id).segments.push({
               startTime: startTime,
@@ -158,7 +151,7 @@ export default function EarliestDeadline({
               isOverload: false,
               isDeadlineFinished: true,
             });
-          } else if (process.deadline <= startTime) {
+          } else if (realDeadline <= startTime) {
             processMap.get(process.id).segments.push({
               startTime,
               endTime,
@@ -178,7 +171,6 @@ export default function EarliestDeadline({
         }
       }
       const turnAroundTimes = Array.from(processMap.values()).map((process) => {
-        console.log(process)
         const arrivalTime = process.arrival;
         const completionTime =
           process.segments[process.segments.length - 1].endTime;
@@ -195,16 +187,6 @@ export default function EarliestDeadline({
 
       setTurnAroundTime(averageTurnAroundTime);
       setSchedulerMatrix(Array.from(processMap.values()));
-      // setTurnAroundTime(
-      //   edfProcesses
-      //     .reduce(
-      //       (value) =>
-      //         (value.finalEndTime - value.firstArrivalTime) /
-      //         edfProcesses.length,
-      //       0
-      //     )
-      //     .toFixed(2)
-      // );
     }
   };
 
