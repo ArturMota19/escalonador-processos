@@ -7,7 +7,7 @@ export default function EarliestDeadline({
   overload,
   processes,
   setReset,
-  delay
+  delay,
 }) {
   // Estados do componente
   const [startScheduler, setStartScheduler] = useState(false);
@@ -174,20 +174,37 @@ export default function EarliestDeadline({
             });
           }
           process.time = 0;
-          processMap.get(process.id).endTime = endTime; 
+          processMap.get(process.id).endTime = endTime;
         }
       }
+      const turnAroundTimes = Array.from(processMap.values()).map((process) => {
+        console.log(process)
+        const arrivalTime = process.arrival;
+        const completionTime =
+          process.segments[process.segments.length - 1].endTime;
+        return completionTime - arrivalTime;
+      });
 
-      setTurnAroundTime(
-        (
-          Array.from(processMap.values()).reduce(
-            (acc, process) => acc + (process.endTime - process.arrival),
-            0
-          ) / processMap.size
-        ).toFixed(2)
+      const totalTurnAroundTime = turnAroundTimes.reduce(
+        (acc, value) => acc + value,
+        0
       );
+      const averageTurnAroundTime = (
+        totalTurnAroundTime / turnAroundTimes.length
+      ).toFixed(2);
 
+      setTurnAroundTime(averageTurnAroundTime);
       setSchedulerMatrix(Array.from(processMap.values()));
+      // setTurnAroundTime(
+      //   edfProcesses
+      //     .reduce(
+      //       (value) =>
+      //         (value.finalEndTime - value.firstArrivalTime) /
+      //         edfProcesses.length,
+      //       0
+      //     )
+      //     .toFixed(2)
+      // );
     }
   };
 
@@ -216,7 +233,11 @@ export default function EarliestDeadline({
       {startScheduler && (
         <div>
           <p>TurnAround: {turnAroundTime}</p>
-          <GanttChart schedulerMatrix={schedulerMatrix} schedulerType="EDF" delay={delay} />
+          <GanttChart
+            schedulerMatrix={schedulerMatrix}
+            schedulerType="EDF"
+            delay={delay}
+          />
         </div>
       )}
     </div>
