@@ -67,10 +67,22 @@ export default function EarliestDeadline({
         }
 
         const startTime = currentTime;
+
+        // Adicionar segmento de espera
+        console.log(process.segments)
+        if (process.segments.length === 0 ) {
+          process.segments.push({
+            startTime: process.arrival,
+            endTime: startTime,
+            isOverload: false,
+            isDeadlineFinished: false,
+            isWaiting: true,
+          });
+        }
+
         let remainingTime = process.time;
         const realDeadline =
           parseInt(process.deadline) + parseInt(process.arrival);
-        console.log(realDeadline);
 
         if (remainingTime > quantum) {
           remainingTime -= quantum;
@@ -86,20 +98,23 @@ export default function EarliestDeadline({
               endTime: endTime,
               isOverload: false,
               isDeadlineFinished: true,
+              isWaiting: false,
             });
           } else if (realDeadline < endTime && realDeadline > startTime) {
-            const DeadlineFinished = parseInt(realDeadline) ;
+            const DeadlineFinished = parseInt(realDeadline);
             processMap.get(process.id).segments.push({
               startTime: startTime,
               endTime: DeadlineFinished,
               isOverload: false,
               isDeadlineFinished: false,
+              isWaiting: false,
             });
             processMap.get(process.id).segments.push({
               startTime: DeadlineFinished,
               endTime: endTime,
               isOverload: false,
               isDeadlineFinished: true,
+              isWaiting: false,
             });
           } else if (realDeadline < startTime) {
             processMap.get(process.id).segments.push({
@@ -107,6 +122,7 @@ export default function EarliestDeadline({
               endTime,
               isOverload: false,
               isDeadlineFinished: true,
+              isWaiting: false,
             });
           } else {
             processMap.get(process.id).segments.push({
@@ -114,6 +130,7 @@ export default function EarliestDeadline({
               endTime,
               isOverload: false,
               isDeadlineFinished: false,
+              isWaiting: false,
             });
           }
 
@@ -124,6 +141,7 @@ export default function EarliestDeadline({
             endTime: overloadEndTime,
             isOverload: true,
             isDeadlineFinished: false,
+            isWaiting: false,
           });
 
           sortedProcesses.sort((a, b) => {
@@ -137,19 +155,21 @@ export default function EarliestDeadline({
           currentTime = endTime;
 
           if (realDeadline < endTime && realDeadline > startTime) {
-            const DeadlineFinished = parseInt(realDeadline) ;
+            const DeadlineFinished = parseInt(realDeadline);
 
             processMap.get(process.id).segments.push({
               startTime: startTime,
               endTime: DeadlineFinished,
               isOverload: false,
               isDeadlineFinished: false,
+              isWaiting: false,
             });
             processMap.get(process.id).segments.push({
               startTime: DeadlineFinished,
               endTime: endTime,
               isOverload: false,
               isDeadlineFinished: true,
+              isWaiting: false,
             });
           } else if (realDeadline <= startTime) {
             processMap.get(process.id).segments.push({
@@ -157,6 +177,7 @@ export default function EarliestDeadline({
               endTime,
               isOverload: false,
               isDeadlineFinished: true,
+              isWaiting: false,
             });
           } else {
             processMap.get(process.id).segments.push({
@@ -164,6 +185,7 @@ export default function EarliestDeadline({
               endTime,
               isOverload: false,
               isDeadlineFinished: false,
+              isWaiting: false,
             });
           }
           process.time = 0;
