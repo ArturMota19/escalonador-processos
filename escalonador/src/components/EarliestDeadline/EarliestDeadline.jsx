@@ -261,7 +261,9 @@ export default function EarliestDeadline({
       </div>
       {startScheduler && (
         <div>
-          <p>TurnAround: {turnAroundTime}</p>
+          <div class="turnaround">
+        <p>TurnAround: {turnAroundTime}</p>
+</div>
           <GanttChart
             schedulerMatrix={schedulerMatrix}
             schedulerType="EDF"

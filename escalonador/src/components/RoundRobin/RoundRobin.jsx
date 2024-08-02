@@ -151,7 +151,9 @@ export default function RoundRobin({ quantum, overload, processes, setReset, del
       </div>
       {startScheduler && (
         <div>
-          <p>TurnAround: {turnAroundTime}</p>
+          <div class="turnaround">
+        <p>TurnAround: {turnAroundTime}</p>
+</div>
           <GanttChart schedulerMatrix={schedulerMatrix} schedulerType="RR" delay={delay} />
         </div>
       )}

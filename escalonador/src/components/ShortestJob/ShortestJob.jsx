@@ -125,7 +125,9 @@ export default function ShortestJob({
       </div>
       {startScheduler && (
         <div>
-          <p>TurnAround: {turnAroundTime}</p>
+          <div class="turnaround">
+        <p>TurnAround: {turnAroundTime}</p>
+</div>
           <GanttChart schedulerMatrix={schedulerMatrix} schedulerType="SJF" delay={delay} />
         </div>
       )}

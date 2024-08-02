@@ -30,7 +30,7 @@ export default function Fifo({
     }
   }, [processes]);
 
-  function callProcesses(){
+  function callProcesses() {
     if (processes.length > 0) {
       const sortedProcesses = processes
         .filter((process) => process.status === "Waiting")
@@ -49,12 +49,12 @@ export default function Fifo({
       setReset(false);
       setStartScheduler(true);
       const processesCopy = [...fifoProcesses];
-  
+
       let currentTime = 0;
       const processMap = new Map(
         processesCopy.map((process) => [process.id, { ...process, segments: [], completionTime: 0 }])
       );
-  
+
       while (processesCopy.some((process) => process.time > 0)) {
         const process = processesCopy.find(
           (p) => p.time > 0 && p.arrival <= currentTime
@@ -63,22 +63,34 @@ export default function Fifo({
           currentTime++;
           continue;
         }
-  
+
+        // Add waiting segment if the process arrived before the current time
+        if (process.arrival < currentTime) {
+          processMap.get(process.id).segments.push({
+            startTime: process.arrival,
+            endTime: currentTime,
+            isOverload: false,
+            isDeadlineFinished: false,
+            isWaiting: true,
+          });
+        }
+
         const startTime = currentTime;
         const endTime = startTime + process.time;
         currentTime = endTime;
-  
+
         processMap.get(process.id).segments.push({
           startTime,
           endTime,
           isOverload: false,
           isDeadlineFinished: false,
+          isWaiting: false,
         });
-  
+
         processMap.get(process.id).completionTime = endTime;
         process.time = 0;
       }
-  
+
       setTurnAroundTime(
         (
           Array.from(processMap.values()).reduce(
@@ -88,7 +100,7 @@ export default function Fifo({
           ) / processMap.size
         ).toFixed(2)
       );
-  
+
       setSchedulerMatrix(Array.from(processMap.values()));
     }
   };
@@ -102,6 +114,7 @@ export default function Fifo({
 
   return (
     <div className={s.fifoWrapper}>
+
       <div className={s.btnWrapper}>
         <button
           onClick={startFIFO}
@@ -116,7 +129,9 @@ export default function Fifo({
       </div>
       {startScheduler && (
         <div>
-          <p>TurnAround: {turnAroundTime}</p>
+          <div class="turnaround">
+        <p>TurnAround: {turnAroundTime}</p>
+</div>
           <GanttChart schedulerMatrix={schedulerMatrix} schedulerType="FIFO" delay={delay} />
         </div>
       )}
