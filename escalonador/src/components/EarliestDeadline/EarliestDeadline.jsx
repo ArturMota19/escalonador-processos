@@ -1,4 +1,6 @@
+// Imports
 import { useEffect, useState } from "react";
+// Styles
 import s from "./EarliestDeadline.module.css";
 import GanttChart from "../GanttChart/GanttChart";
 
@@ -22,13 +24,14 @@ export default function EarliestDeadline({
         .filter((process) => process.status === "Waiting")
         .sort((a, b) => {
           if (a.deadline === b.deadline) {
-            return a.arrival - b.arrival;
+            return b.firstArrivalTime - a.firstArrivalTime;
           }
           return a.deadline - b.deadline;
         })
         .map((process, index) => ({
           ...process,
           arrivalTime: index,
+          firstArrivalTime: process.arrival,
           segments: [],
         }));
 
@@ -48,7 +51,7 @@ export default function EarliestDeadline({
         .filter((process) => process.status === "Waiting")
         .sort((a, b) => {
           if (a.deadline === b.deadline) {
-            return a.arrival - b.arrival;
+            return b.firstArrivalTime - a.firstArrivalTime;
           }
           return a.deadline - b.deadline;
         });
@@ -62,6 +65,17 @@ export default function EarliestDeadline({
           (p) => p.time > 0 && p.arrival <= currentTime
         );
         if (!process) {
+          // sortedProcesses.forEach((p) => {
+          //   if (p.time > 0 && p.arrival <= currentTime) {
+          //     p.segments.push({
+          //       startTime: currentTime - 1,
+          //       endTime: currentTime,
+          //       isOverload: false,
+          //       isDeadlineFinished: false,
+          //       isWaiting: true,
+          //     });
+          //   }
+          // });
           currentTime++;
           continue;
         }
@@ -69,8 +83,10 @@ export default function EarliestDeadline({
         const startTime = currentTime;
 
         // Adicionar segmento de espera
-        console.log(process.segments)
-        if (process.segments.length === 0 ) {
+        if (
+          process.segments.length === 0
+          // process.segments[process.segments.length - 1].endTime !== startTime
+        ) {
           process.segments.push({
             startTime: process.arrival,
             endTime: startTime,
@@ -98,7 +114,6 @@ export default function EarliestDeadline({
               endTime: endTime,
               isOverload: false,
               isDeadlineFinished: true,
-              isWaiting: false,
             });
           } else if (realDeadline < endTime && realDeadline > startTime) {
             const DeadlineFinished = parseInt(realDeadline);
@@ -107,14 +122,12 @@ export default function EarliestDeadline({
               endTime: DeadlineFinished,
               isOverload: false,
               isDeadlineFinished: false,
-              isWaiting: false,
             });
             processMap.get(process.id).segments.push({
               startTime: DeadlineFinished,
               endTime: endTime,
               isOverload: false,
               isDeadlineFinished: true,
-              isWaiting: false,
             });
           } else if (realDeadline < startTime) {
             processMap.get(process.id).segments.push({
@@ -122,7 +135,6 @@ export default function EarliestDeadline({
               endTime,
               isOverload: false,
               isDeadlineFinished: true,
-              isWaiting: false,
             });
           } else {
             processMap.get(process.id).segments.push({
@@ -130,7 +142,6 @@ export default function EarliestDeadline({
               endTime,
               isOverload: false,
               isDeadlineFinished: false,
-              isWaiting: false,
             });
           }
 
@@ -162,14 +173,12 @@ export default function EarliestDeadline({
               endTime: DeadlineFinished,
               isOverload: false,
               isDeadlineFinished: false,
-              isWaiting: false,
             });
             processMap.get(process.id).segments.push({
               startTime: DeadlineFinished,
               endTime: endTime,
               isOverload: false,
               isDeadlineFinished: true,
-              isWaiting: false,
             });
           } else if (realDeadline <= startTime) {
             processMap.get(process.id).segments.push({
@@ -177,7 +186,6 @@ export default function EarliestDeadline({
               endTime,
               isOverload: false,
               isDeadlineFinished: true,
-              isWaiting: false,
             });
           } else {
             processMap.get(process.id).segments.push({
@@ -185,13 +193,30 @@ export default function EarliestDeadline({
               endTime,
               isOverload: false,
               isDeadlineFinished: false,
-              isWaiting: false,
             });
           }
+
           process.time = 0;
           processMap.get(process.id).endTime = endTime;
         }
+        
+        // Adiciona segmento de espera após a execução se houver tempo ocioso
+        sortedProcesses.forEach((p) => {
+          if (p.time > 0 && p !== process && p.arrival <= currentTime) {
+            const lastSegment = p.segments[p.segments.length - 1];
+            if (lastSegment && lastSegment.endTime < currentTime) {
+              p.segments.push({
+                startTime: lastSegment.endTime,
+                endTime: currentTime,
+                isOverload: false,
+                isDeadlineFinished: false,
+                isWaiting: true,
+              });
+            }
+          }
+        });
       }
+
       const turnAroundTimes = Array.from(processMap.values()).map((process) => {
         const arrivalTime = process.arrival;
         const completionTime =
