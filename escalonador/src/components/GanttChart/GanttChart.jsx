@@ -109,7 +109,7 @@ export default function GanttChart({ schedulerMatrix, schedulerType, delay }) {
           </text>
         ))}
       </svg>
-      <ProcessSubtitle colors={colors} />
+      <ProcessSubtitle colors={colors} schedulerType={schedulerType} />
     </>
   );
 }

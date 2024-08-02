@@ -60,7 +60,7 @@ export default function Header({selectedButton, setSelectedButton, quantum, setQ
         <div className={s.wrapperDelay}>
           <div className={s.wrapperDelaySeconds}>
             <p>Delay: </p>
-            <input onChange={(e) => setDelay(parseFloat(e.target.value))} type="range" min="0" max="2" step={0.5} />
+            <input onChange={(e) => setDelay(parseFloat(e.target.value))} type="range" min="0" max="2" step={0.5} value={delay} />
             <p>{delay}</p>
           </div>
         </div>
