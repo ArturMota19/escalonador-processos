@@ -33,6 +33,7 @@ export default function ShortestJob({
         .map((process, index) => ({
           ...process,
           arrivalTime: index,
+          segments: [],
         }));
 
       setSjfProcesses(sortedProcesses);
@@ -63,6 +64,16 @@ export default function ShortestJob({
           continue;
         }
   
+        if (process.arrival <= currentTime && process.time > 0 && process.segments.length === 0) {
+          processMap.get(process.id).segments.push({
+            startTime: process.arrival,
+            endTime: currentTime,
+            isOverload: false,
+            isDeadlineFinished: false,
+            isWaiting: true,
+          });
+        }
+  
         const startTime = currentTime;
         const endTime = startTime + process.time;
         currentTime = endTime;
@@ -72,6 +83,7 @@ export default function ShortestJob({
           endTime,
           isOverload: false,
           isDeadlineFinished: false,
+          isWaiting: false,
         });
   
         process.time = 0;

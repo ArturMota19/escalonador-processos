@@ -1,6 +1,6 @@
 .subtitle {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   margin: 15px 200px;
 }
 
