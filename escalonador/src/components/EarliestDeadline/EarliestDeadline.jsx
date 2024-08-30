@@ -51,7 +51,7 @@ export default function EarliestDeadline({
         .filter((process) => process.status === "Waiting")
         .sort((a, b) => {
           if (a.deadline === b.deadline) {
-            return b.firstArrivalTime - a.firstArrivalTime;
+            return a.time - b.time;
           }
           return a.deadline - b.deadline;
         });
@@ -157,7 +157,7 @@ export default function EarliestDeadline({
 
           sortedProcesses.sort((a, b) => {
             if (a.deadline === b.deadline) {
-              return a.arrival - b.arrival;
+              return a.time - b.time;
             }
             return a.deadline - b.deadline;
           });
@@ -199,7 +199,7 @@ export default function EarliestDeadline({
           process.time = 0;
           processMap.get(process.id).endTime = endTime;
         }
-        
+
         // Adiciona segmento de espera após a execução se houver tempo ocioso
         sortedProcesses.forEach((p) => {
           if (p.time > 0 && p !== process && p.arrival <= currentTime) {
